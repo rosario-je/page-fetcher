@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/rosario-je/page-fetcher#readme",
   "dependencies": {
+    "node-fetch": "^2.7.0",
     "request": "^2.88.2"
   }
 }

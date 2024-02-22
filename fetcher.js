@@ -9,19 +9,35 @@
 
 */
 
-const request = require('request');
+const fs = require('fs');
+const fetch = require('node-fetch')
+// const fs = require('node:fs/promises');
+
 const input = process.argv.slice(2)
 
-let url;
-let filePath;
-
 //Take the separate inputs (URL and Filepath from the user)
-for (let i = 0; i < input.length; i++) {
-  url = input[0];
-  filePath = input[1];
+let url = input[0]
+let filePath = input[1]
+
+if (input.length < 2){
+  console.log("Provide the following format: <url> <filepath>")
+  process.exit();
 }
-request(`${url}`, (error, response, body) => {
-  console.log('error:', error);
-  console.log('statusCode:', response && response.statusCode); 
-  console.log('body:', body); 
-});
+
+async function downloadPage() {
+  try {
+    const response = await fetch(url);
+    const data = await response.buffer(); // Get response body as a Buffer
+    fs.writeFile(filePath, data, err => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(`Downloaded and saved ${data.length} bytes to ${filePath}`);
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+downloadPage();
