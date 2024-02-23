@@ -10,34 +10,36 @@
 */
 
 const fs = require('fs');
-const fetch = require('node-fetch')
-// const fs = require('node:fs/promises');
+const readline = require('readline')
+const pageDownload = require('./requestFunction')
+const { url, filePath} = require('./constants')
 
-const input = process.argv.slice(2)
+/*--Edge Cases--*/
 
-//Take the separate inputs (URL and Filepath from the user)
-let url = input[0]
-let filePath = input[1]
-
-if (input.length < 2){
+//Check for valid input format
+if (process.argv.length !== 4) {
   console.log("Provide the following format: <url> <filepath>")
   process.exit();
 }
+if (fs.existsSync(filePath)) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
 
-async function downloadPage() {
-  try {
-    const response = await fetch(url);
-    const data = await response.buffer(); // Get response body as a Buffer
-    fs.writeFile(filePath, data, err => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(`Downloaded and saved ${data.length} bytes to ${filePath}`);
-      }
-    });
-  } catch (error) {
-    console.error('Error:', error);
-  }
+  rl.question("File already exists. Would you like to override? Press y(yes) or n(no)", function (answer) {
+    if (answer.toLowerCase() === 'y') {
+      console.log("Overriding the file...");
+      pageDownload();
+    } else if (answer.toLowerCase() === 'n') {
+      console.log("Exiting without overriding.");
+      rl.close();
+    } else {
+      console.log("Invalid input. Please press y for yes or n for no.");
+      rl.close();
+    }
+  });
+} else {
+  console.log("File does not exist");
+  pageDownload();
 }
-
-downloadPage();
