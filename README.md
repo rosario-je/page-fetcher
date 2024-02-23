@@ -9,7 +9,7 @@ To use this application, follow these steps:
 1. Clone the repository to your local machine.
 2. Install the necessary dependencies using npm.
 3. Run the application with the following command: 
-node app.js <url> <filepath>
+```node app.js <url> <filepath>```
 
 Replace `<url>` with the URL of the file you want to download and `<filepath>` with the path where you want to save the downloaded file.
 
