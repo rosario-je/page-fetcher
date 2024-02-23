@@ -21,19 +21,23 @@ if (process.argv.length !== 4) {
   console.log("Provide the following format: <url> <filepath>")
   process.exit();
 }
+//Check if file exists
 if (fs.existsSync(filePath)) {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
-
+  //If file exists, ask following question
   rl.question("File already exists. Would you like to override? Press y(yes) or n(no)", function (answer) {
+    //If answer is yes, log message and call pageDownloader function
     if (answer.toLowerCase() === 'y') {
       console.log("Overriding the file...");
       pageDownload();
+      //If answer is no, log message and close the program
     } else if (answer.toLowerCase() === 'n') {
       console.log("Exiting without overriding.");
       rl.close();
+      //If user answer is invalid, log message and close program
     } else {
       console.log("Invalid input. Please press y for yes or n for no.");
       rl.close();
